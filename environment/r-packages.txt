@@ -1,0 +1,13 @@
+data.table
+dplyr
+fixest
+ggplot2
+HonestDiD
+MatchIt
+openxlsx
+qte
+synthdid
+tidyselect
+tidyverse
+writexl
+zip

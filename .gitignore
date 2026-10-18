@@ -1,0 +1,41 @@
+# Datos fuente e intermedios
+data/
+datos_eeff/
+Datos Educacion/
+EEFF/
+Literature/
+Extra/
+*.csv
+*.dta
+*.sav
+*.xls
+*.xlsx
+*.RData
+*.RDataTmp*
+*.parquet
+*.feather
+*.db
+*.sqlite
+
+# Resultados masivos; el repositorio conserva solo ejemplos seleccionados
+Plots_Dynamic/
+Plots_Log/
+Plots_IV/
+Plots_PSM/
+Plots_PreTrends/
+Diagnostics/
+modelos_txt/
+
+# Entornos y archivos locales
+.env
+.env.*
+.Rhistory
+.Rproj.user/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

@@ -1,0 +1,103 @@
+\begin{table}[!htbp]
+\centering
+\caption{Difference-in-Differences Estimates}
+\label{tab:did_static_levels}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{With closure-risk controls} & \multicolumn{3}{c}{Excluding closure-risk controls} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+ & With closure-risk controls: (1) Basic DiD & With closure-risk controls: (2) University + Year FE & With closure-risk controls: (3) FE + Controls & Excluding closure-risk controls: (1) Basic DiD & Excluding closure-risk controls: (2) University + Year FE & Excluding closure-risk controls: (3) FE + Controls \\
+\midrule
+Revenue per Student Real & 188972.479 & -3068.537 & -1114.360 & -29.582 & -68.520 & -158.868 \\
+ & (129928.832) & (2932.708) & (9506.224) & (281.511) & (275.979) & (358.939) \\
+\quad Observations & 612 & 612 & 557 & 572 & 572 & 522 \\
+\quad Adjusted R2 & 0.049 & 0.992 & 0.991 & 0.064 & 0.911 & 0.913 \\
+OPEX per Student Real & 133144.964 & -23536.407 & -14742.624 & 22.874 & -36.530 & 140.353 \\
+ & (88662.493) & (24798.426) & (21483.876) & (270.447) & (260.882) & (385.071) \\
+\quad Observations & 612 & 612 & 557 & 572 & 572 & 522 \\
+\quad Adjusted R2 & 0.033 & 0.743 & 0.831 & 0.049 & 0.917 & 0.925 \\
+CapEx per Student Real & 12939.459 & 3156.238 & 8530.584 & 114.065 & 138.049 & 229.612 \\
+ & (16041.108) & (4778.911) & (12444.520) & (180.504) & (201.239) & (286.649) \\
+\quad Observations & 608 & 608 & 552 & 572 & 572 & 521 \\
+\quad Adjusted R2 & 0.003 & 0.231 & 0.232 & -0.004 & 0.161 & 0.200 \\
+Adjusted Operating Margin (\%) & -15.007 & 21.091 & -0.283 & -44.766 & -2.827 & -15.777* \\
+ & (36.391) & (18.525) & (19.061) & (40.788) & (5.195) & (8.696) \\
+\quad Observations & 584 & 584 & 530 & 545 & 545 & 496 \\
+\quad Adjusted R2 & -0.004 & 0.151 & 0.037 & 0.005 & 0.178 & 0.204 \\
+Gross Margin (\%) & -33.824 & -3.480 & -21.383* & -39.377 & 1.720 & -9.084 \\
+ & (35.060) & (17.208) & (12.433) & (40.194) & (3.051) & (6.708) \\
+\quad Observations & 613 & 613 & 557 & 573 & 573 & 522 \\
+\quad Adjusted R2 & 0.005 & 0.152 & 0.043 & 0.004 & 0.182 & 0.421 \\
+Cash Flow Margin, Adjusted (\%) & -8.234 & 27.304 & 9.192 & -42.599 & -1.904 & -12.762 \\
+ & (38.859) & (25.143) & (24.682) & (40.244) & (5.911) & (9.345) \\
+\quad Observations & 601 & 601 & 546 & 561 & 561 & 511 \\
+\quad Adjusted R2 & -0.005 & 0.139 & 0.031 & 0.004 & 0.181 & 0.193 \\
+Current Debt Service & -104.514* & -106.872* & -12.020 & -105.143* & -108.865* & -17.472 \\
+ & (58.659) & (64.740) & (30.512) & (58.909) & (66.051) & (30.159) \\
+\quad Observations & 573 & 573 & 523 & 538 & 538 & 492 \\
+\quad Adjusted R2 & 0.001 & 0.007 & 0.006 & 0.001 & 0.010 & 0.011 \\
+Capital Expenditures / Depreciation Expense & 0.837 & 0.846 & 1.135 & 1.045 & 0.897 & 1.219 \\
+ & (0.695) & (0.776) & (1.542) & (0.784) & (0.836) & (1.575) \\
+\quad Observations & 592 & 592 & 537 & 557 & 557 & 507 \\
+\quad Adjusted R2 & -0.003 & -0.022 & 0.024 & -0.002 & -0.023 & 0.029 \\
+Available Funds / Total Liabilities (\%) & 9.156 & 11.597 & 21.697 & 11.575 & 13.325 & 27.198 \\
+ & (13.630) & (14.825) & (34.188) & (15.606) & (16.474) & (37.945) \\
+\quad Observations & 586 & 586 & 534 & 551 & 551 & 503 \\
+\quad Adjusted R2 & 0.027 & 0.329 & 0.375 & 0.020 & 0.327 & 0.380 \\
+Capital Expenditures / Fixed Assets & 0.178** & 0.160* & 0.202 & 0.182** & 0.161* & 0.215 \\
+ & (0.084) & (0.087) & (0.197) & (0.092) & (0.096) & (0.198) \\
+\quad Observations & 609 & 609 & 552 & 573 & 573 & 521 \\
+\quad Adjusted R2 & 0.007 & -0.004 & 0.024 & 0.006 & -0.005 & 0.040 \\
+Depreciation / Fixed Assets & 0.169 & 0.124 & 0.180 & 0.156 & 0.096 & 0.184 \\
+ & (0.124) & (0.103) & (0.167) & (0.150) & (0.106) & (0.172) \\
+\quad Observations & 596 & 596 & 541 & 557 & 557 & 507 \\
+\quad Adjusted R2 & 0.042 & 0.223 & 0.124 & 0.030 & 0.221 & 0.119 \\
+Asset Turnover & 0.139 & 0.032 & -0.117 & 0.102 & 0.005 & -0.128 \\
+ & (0.088) & (0.091) & (0.094) & (0.100) & (0.097) & (0.098) \\
+\quad Observations & 613 & 613 & 557 & 573 & 573 & 522 \\
+\quad Adjusted R2 & 0.173 & 0.626 & 0.683 & 0.176 & 0.618 & 0.677 \\
+Total Liabilities / Equity & -13.919 & -21.972 & -15.190 & -5.813 & -6.032 & -5.320 \\
+ & (9.914) & (17.877) & (13.444) & (6.332) & (7.004) & (7.230) \\
+\quad Observations & 586 & 586 & 534 & 551 & 551 & 503 \\
+\quad Adjusted R2 & 0.004 & 0.071 & 0.111 & 0.001 & -0.003 & -0.010 \\
+Total Assets / Total Liabilities & -0.679 & -0.572 & 0.282 & -0.393 & -0.416 & -0.252 \\
+ & (0.421) & (0.400) & (0.604) & (0.350) & (0.368) & (0.418) \\
+\quad Observations & 586 & 586 & 534 & 551 & 551 & 503 \\
+\quad Adjusted R2 & 0.091 & 0.588 & 0.685 & 0.114 & 0.730 & 0.765 \\
+Capital Expenditures / Total Enrollment & 12772.810 & 3065.997 & 8634.931 & 106.120 & 129.194 & 204.364 \\
+ & (15562.154) & (4593.841) & (12224.292) & (172.553) & (191.491) & (271.442) \\
+\quad Observations & 608 & 608 & 552 & 572 & 572 & 521 \\
+\quad Adjusted R2 & 0.003 & 0.222 & 0.227 & -0.003 & 0.154 & 0.175 \\
+Total Operating Expense / Total Enrollment & 122247.968 & -29207.339 & -18342.002 & 264.356 & 199.751 & 199.381 \\
+ & (80872.455) & (28274.634) & (26495.957) & (320.815) & (314.308) & (391.264) \\
+\quad Observations & 612 & 612 & 557 & 572 & 572 & 522 \\
+\quad Adjusted R2 & 0.031 & 0.731 & 0.824 & 0.083 & 0.921 & 0.932 \\
+Adjusted Total Operating Revenue / Total Enrollment & 171283.974 & -10609.524 & -5509.207 & 229.920 & 184.240 & -95.022 \\
+ & (117134.679) & (8848.711) & (14995.103) & (328.513) & (325.445) & (363.648) \\
+\quad Observations & 612 & 612 & 557 & 572 & 572 & 522 \\
+\quad Adjusted R2 & 0.046 & 0.989 & 0.989 & 0.094 & 0.915 & 0.922 \\
+Real Operating Revenue per Student - Annual Log Change & -0.005 & -0.005 & 0.065 & -0.007 & -0.004 & 0.024 \\
+ & (0.021) & (0.024) & (0.052) & (0.025) & (0.027) & (0.043) \\
+\quad Observations & 556 & 556 & 553 & 522 & 522 & 519 \\
+\quad Adjusted R2 & -0.002 & -0.064 & -0.053 & 0.002 & -0.045 & -0.042 \\
+Real Operating Expense per Student - Annual Log Change & 0.097* & 0.075** & 0.107** & 0.038 & 0.049 & 0.092* \\
+ & (0.058) & (0.037) & (0.050) & (0.033) & (0.034) & (0.050) \\
+\quad Observations & 556 & 556 & 553 & 522 & 522 & 519 \\
+\quad Adjusted R2 & 0.020 & 0.091 & 0.099 & 0.017 & 0.028 & 0.034 \\
+Real Capital Expenditures per Student - Annual Log Change & -0.019 & 0.023 & -0.020 & -0.162 & -0.145 & 0.044 \\
+ & (0.174) & (0.200) & (0.333) & (0.133) & (0.147) & (0.277) \\
+\quad Observations & 468 & 468 & 465 & 448 & 448 & 445 \\
+\quad Adjusted R2 & 0.002 & -0.029 & -0.022 & -0.001 & -0.065 & -0.042 \\
+\midrule
+University FE & No & Yes & Yes & No & Yes & Yes \\
+Year FE & No & Yes & Yes & No & Yes & Yes \\
+Controls & No & No & Yes & No & No & Yes \\
+SE clustered by university & Yes & Yes & Yes & Yes & Yes & Yes \\
+\bottomrule
+\end{tabular}%
+}
+\begin{minipage}{0.98\textwidth}
+\footnotesize \textit{Notes:} Each reported coefficient is the interaction $Post_t \times Treat_i$. Within each sample block, the first column is the canonical pre/post DiD, the second includes university and year fixed effects, and the third additionally controls for changes relative to 2015 in log undergraduate enrollment, gratuidad eligibility proxy, accreditation years, and eligibility-proxy coverage. The restricted block excludes UNIACC, Universidad del Pacífico, UCINF, ARCIS and Universidad de Los Leones. Both blocks exclude Universidad de Aysén and Universidad de O'Higgins, later-treated universities, and use university-clustered standard errors. Missing observations remain missing. $^{***}p<0.01$, $^{**}p<0.05$, $^{*}p<0.10$.
+\end{minipage}
+\end{table}

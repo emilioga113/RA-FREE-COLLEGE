@@ -1,0 +1,783 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,longtable,array}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black}
+\setlist[itemize]{leftmargin=1.5em,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=1.7em,itemsep=3pt,topsep=3pt}
+\renewcommand{\arraystretch}{1.18}
+
+\newcommand{\Treat}{\mathrm{Treat}}
+\newcommand{\Post}{\mathrm{Post}}
+\newcommand{\ATT}{\mathrm{ATT}}
+\newcommand{\SDID}{\mathrm{SDID}}
+\newcommand{\FE}{\mathrm{FE}}
+\newcommand{\PS}{\mathrm{PS}}
+\newcommand{\ind}{\mathbb{1}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\asinh}{\operatorname{asinh}}
+\newcommand{\file}[1]{\texttt{#1}}
+
+\title{Ecuaciones de los modelos y tablas del proyecto Free College}
+\author{Apéndice metodológico autónomo}
+\date{13 de octubre de 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+\section{Objetivo y alcance}
+
+Este documento vincula las tablas principales descritas en
+\file{INDICE\_ARCHIVOS\_FREE\_COLLEGE.txt} con las ecuaciones que generan sus
+estimandos. La unidad de observación es la universidad $i$ en el año $t$. El
+período de análisis financiero es 2011--2022 y la reforma comienza en 2016. Los
+modelos estáticos construyen controles como cambios respecto de 2015; el event
+study dinámico omite 2013 para estimar explícitamente 2014 y 2015 como períodos
+de anticipación.
+
+La cohorte tratada está formada por universidades que ingresan a Gratuidad en
+2016. Los controles son exclusivamente universidades nunca tratadas; las
+instituciones tratadas después de 2016 no se usan como controles. Universidad
+de O'Higgins y Universidad de Aysén se excluyen de la muestra financiera por no
+disponer de una línea de base comparable. Las tablas principales reportan además
+dos muestras lado a lado: una que conserva todos los controles disponibles y
+otra que excluye UNIACC, Universidad del Pacífico, UCINF, ARCIS y Universidad de
+Los Leones por cierre o pérdida de acreditación, discontinuidades de unidad o
+márgenes extremos.
+
+Definimos
+\begin{align}
+  \Treat_i &= \ind\{G_i=2016\}, \\
+  \Post_t  &= \ind\{t\geq 2016\}, \\
+  D_{it}   &= \Treat_i\Post_t,
+\end{align}
+donde $G_i$ es el año de entrada de la universidad $i$ a Gratuidad. El
+parámetro de interés se interpreta como efecto sobre las universidades tratadas
+en 2016 respecto de las nunca tratadas, bajo los supuestos de identificación de
+cada método.
+
+\section{Construcción de outcomes y transformaciones}
+
+\subsection{Montos reales por estudiante}
+
+Sea $P_t$ el índice de precios normalizado a $P_{2015}=1$ e $\pi_t$ la inflación
+anual expresada en decimales. El índice se construye como
+\begin{align}
+ P_t &= P_{t-1}(1+\pi_t), && t>2015, \\
+ P_t &= \frac{P_{t+1}}{1+\pi_{t+1}}, && t<2015.
+\end{align}
+
+Para una variable monetaria nominal por estudiante $M^{N}_{it}$, el nivel real
+es
+\begin{equation}
+ M^{R}_{it}=\frac{M^{N}_{it}}{P_t}.
+\end{equation}
+Esta regla genera \emph{Revenue per Student Real}, \emph{OPEX per Student Real}
+y \emph{CapEx per Student Real} a partir de sus variables nominales por
+matrícula total.
+
+La variación logarítmica real anual satisface
+\begin{equation}
+ \Delta\log M^{R}_{it}
+ =\Delta\log M^{N}_{it}-\log(1+\pi_t),
+\end{equation}
+siempre que los valores nominales sean estrictamente positivos y que $t-1$ y
+$t$ sean años consecutivos.
+
+\subsection{Transformaciones usadas en las tablas}
+
+Para cada outcome $j$, las tablas transformadas aplican una función $g_j(\cdot)$:
+\begin{equation}
+ Y^{(g)}_{it,j}=g_j(Y_{it,j}),
+\end{equation}
+con
+\begin{align}
+ g_j(y)&=\log(y), && y>0, \\
+ g_j(y)&=\asinh(y)=\log\!\left(y+\sqrt{y^2+1}\right), \\
+ g_j(y)&=\asinh(y/100), && \text{para ratios expresados en porcentaje}, \\
+ g_j(y)&=y, && \text{para variaciones logarítmicas reales ya construidas}.
+\end{align}
+Los valores $y\leq 0$ son missing en las transformaciones logarítmicas; no se
+imputan ni se corrigen. Para coeficientes en log, el cambio porcentual exacto es
+\begin{equation}
+ 100\left[\exp(\widehat\tau)-1\right].
+\end{equation}
+
+\section{Tabla de estadísticas descriptivas}
+
+\subsection*{Archivos asociados}
+\begin{itemize}
+ \item \file{Difference-in-Difference Analysis/results/Table\_Descriptive\_Statistics.xlsx}
+ \item \file{Summary statistics before and after the reform/Table\_Excluded\_Universities\_Descriptive.xlsx}
+\end{itemize}
+
+Esta tabla no estima una ecuación causal. Para una variable $Y$ y un subconjunto
+$\mathcal S$ (pre, post, CRUCH o privada), reporta
+\begin{align}
+ \bar Y_{\mathcal S}
+ &=\frac{1}{n_{\mathcal S}}\sum_{(i,t)\in\mathcal S}Y_{it}, \\
+ \widetilde Y_{\mathcal S}
+ &=\operatorname{mediana}\{Y_{it}:(i,t)\in\mathcal S\}, \\
+ s_{\mathcal S}
+ &=\sqrt{\frac{1}{n_{\mathcal S}-1}
+   \sum_{(i,t)\in\mathcal S}(Y_{it}-\bar Y_{\mathcal S})^2}, \\
+ N_{\mathcal S}&=n_{\mathcal S}.
+\end{align}
+La hoja \file{Pre\_Post} utiliza $t<2016$ y $t\geq 2016$. La hoja
+\file{CRUCH\_Private} usa la clasificación institucional fija del proyecto.
+La tabla de universidades excluidas aplica los mismos momentos a cada
+institución y variable, y agrega el primer y último año observado; es
+descriptiva y no causal.
+
+\section{Difference-in-Differences convencional}
+
+\subsection*{Archivos asociados}
+\begin{itemize}
+ \item \file{Table\_DiD\_Main\_Levels.xlsx}
+ \item \file{Table\_DiD\_Main\_Transformed.xlsx}
+\end{itemize}
+
+\subsection{Columna (1): Basic DiD}
+
+La especificación canónica pre/post es
+\begin{equation}
+ Y_{it}=\alpha+\beta_1\Treat_i+\beta_2\Post_t
+       +\tau D_{it}+\varepsilon_{it}.
+ \label{eq:basic-did}
+\end{equation}
+El coeficiente reportado es $\widehat\tau$, asociado a
+$D_{it}=\Treat_i\Post_t$.
+
+\subsection{Columna (2): efectos fijos de universidad y año}
+
+La especificación TWFE es
+\begin{equation}
+ Y_{it}=\alpha_i+\lambda_t+\tau D_{it}+\varepsilon_{it},
+ \label{eq:twfe}
+\end{equation}
+donde $\alpha_i$ absorbe heterogeneidad permanente de cada universidad y
+$\lambda_t$ absorbe shocks comunes de cada año.
+
+\subsection{Columna (3): efectos fijos y controles}
+
+La especificación completa es
+\begin{equation}
+ Y_{it}=\alpha_i+\lambda_t+\tau D_{it}
+       +\boldsymbol\gamma'\mathbf X_{it}+\varepsilon_{it},
+ \label{eq:twfe-controls}
+\end{equation}
+con
+\begin{equation}
+ \mathbf X_{it}=
+ \begin{bmatrix}
+  \Delta_{2015}\log(\text{matrícula}_{it}) \\
+  \Delta_{2015}(\text{elegibilidad proxy}_{it}/10) \\
+  \Delta_{2015}(\text{años de acreditación}_{it}) \\
+  \Delta_{2015}(\text{cobertura elegibilidad}_{it}/10)
+ \end{bmatrix},
+ \qquad
+ \Delta_{2015}X_{it}=X_{it}-X_{i,2015}.
+\end{equation}
+
+En las tres columnas, la inferencia agrupa los errores estándar por universidad:
+\begin{equation}
+ \widehat{\Var}_{\mathrm{cl},i}(\widehat{\boldsymbol\beta})
+ =(X'X)^{-1}
+ \left(\sum_i X_i'\widehat{\mathbf u}_i
+              \widehat{\mathbf u}_i'X_i\right)
+ (X'X)^{-1},
+\end{equation}
+con la corrección finita implementada por el software.
+
+La tabla transformada reemplaza $Y_{it}$ por $g_j(Y_{it})$ en
+\eqref{eq:basic-did}--\eqref{eq:twfe-controls}; no cambia el diseño.
+
+\subsection{Event study dinámico}
+
+Los archivos \file{event\_dynamic\_<OUTCOME>.csv} y
+\file{event\_log\_dynamic\_<OUTCOME>.csv} corresponden a
+\begin{equation}
+ Y_{it}=\alpha_i+\lambda_t+
+ \sum_{k\neq -3}\tau_k
+ \left[\Treat_i\ind\{t-2016=k\}\right]
+ +\boldsymbol\gamma'\mathbf X_{it}+\varepsilon_{it},
+ \label{eq:event-study}
+\end{equation}
+donde $k=-3$ (año 2013) es la categoría omitida. El coeficiente $k=-4$ (2012)
+es el único coeficiente estrictamente anterior a la referencia disponible en la
+ventana estimada; $k=-2$ y $k=-1$ corresponden a 2014 y 2015 y se interpretan
+como anticipación. Los coeficientes $k\geq 0$ representan la dinámica posterior
+a la reforma bajo el supuesto de tendencias paralelas.
+
+\section{Pre-tendencias, anticipación y sensibilidad de Roth}
+
+\subsection*{Archivos asociados}
+\begin{itemize}
+ \item \file{Pre-Trends Analysis/Results/Table\_PreTrends\_Main\_Levels.xlsx}
+ \item \file{Pre-Trends Analysis/Results/Table\_PreTrends\_Main\_Transformed.xlsx}
+ \item \file{Pre-Trends Analysis/Results/Table\_PreTrends\_Power.csv}
+ \item \file{Pre-Trends Analysis/Results/Table\_HonestDiD\_Relative\_Magnitude.csv}
+ \item \file{Pre-Trends Analysis/Results/Table\_HonestDiD\_Smoothness.csv}
+\end{itemize}
+
+Este módulo es independiente de las tablas DiD, SDID e IV. Las dos tablas
+principales estiman, para $h\in\{2012,2014,2015\}$, la misma regresión de
+cambios usada para construir el event study DiD:
+\begin{equation}
+ Y_{ih}-Y_{i,2013}
+ =a_h+\theta_h\Treat_i
+ +\boldsymbol\gamma_h'
+   (\mathbf X_{ih}-\mathbf X_{i,2013})+u_{ih},
+ \label{eq:pretrends-change-regression}
+\end{equation}
+donde $\mathbf X_{it}$ contiene log matrícula de pregrado, proxy de elegibilidad
+dividida por 10, años de acreditación y cobertura del proxy dividida por 10.
+Así, $\theta_{2012}$ es la pre-tendencia reportada y $\theta_{2014}$ y
+$\theta_{2015}$ son los coeficientes de anticipación. Cada regresión se estima
+por separado para la muestra con y sin los cinco controles de riesgo. Los
+errores estándar y los IC al 95\% provienen de bootstrap por universidad; el
+$R^2$ ajustado corresponde a la regresión OLS de cambios de
+\eqref{eq:pretrends-change-regression}. Para la tabla transformada se reemplaza
+$Y$ por $g_j(Y)$, usando la misma transformación que en DiD y SDID.
+
+Los diagnósticos \file{pretrends} y \file{HonestDiD} reciben del event study el
+vector de coeficientes y su matriz de varianza--covarianza conjunta,
+\begin{equation}
+ \widehat{\boldsymbol\beta}
+ =\left(\widehat\tau_k:k\in\mathcal K,\ k\neq-3\right)',
+ \qquad
+ \widehat{\boldsymbol\Sigma}
+ =\widehat{\Var}_{\mathrm{bootstrap},i}
+   (\widehat{\boldsymbol\beta}),
+ \label{eq:roth-inputs}
+\end{equation}
+donde el bootstrap remuestrea universidades completas para preservar la
+dependencia serial dentro de institución.
+
+\subsection{Potencia del test de pre-tendencias}
+
+El paquete \file{pretrends} evalúa una familia de violaciones lineales respecto
+de la referencia 2013,
+\begin{equation}
+ \delta_k(s)=s\{k-(-3)\}=s(k+3),
+ \label{eq:linear-pretrend}
+\end{equation}
+y calcula la pendiente mínima cuya prueba de pre-tendencias tendría potencia
+objetivo de 80\%:
+\begin{equation}
+ s_{0.80}
+ =\inf\left\{s\geq0:
+ \Pr_{\boldsymbol\delta(s)}\!\left(\phi_{\mathrm{pre}}=1\right)
+ \geq0.80\right\}.
+ \label{eq:pretrend-power}
+\end{equation}
+Aquí $\phi_{\mathrm{pre}}=1$ indica que el test detecta al menos una desviación
+pretratamiento significativa. Un $s_{0.80}$ grande implica baja potencia contra
+tendencias lineales económicamente moderadas. Como con base 2013 solo existe un
+coeficiente anterior ($k=-4$), el resultado es un diagnóstico explícito de la
+limitación de potencia y no una validación de tendencias paralelas. Esta es la
+implementación de \href{https://github.com/jonathandroth/pretrends}{Roth
+(2022), \file{pretrends}}.
+
+\subsection{Intervalos robustos HonestDiD}
+
+Sea $\Delta_k$ la desviación de la tendencia contrafactual entre tratadas y
+controles. El coeficiente dinámico observado puede escribirse como
+\begin{equation}
+ \beta_k=\tau_k+\Delta_k,
+ \label{eq:event-bias-decomposition}
+\end{equation}
+donde $\tau_k$ es el efecto causal y $\Delta_k$ es el sesgo por violación de
+tendencias paralelas. El análisis de magnitud relativa restringe los cambios
+post-referencia mediante
+\begin{equation}
+ |\Delta_{k+1}-\Delta_k|
+ \leq \bar M
+ \max_{\ell<-3}|\Delta_{\ell+1}-\Delta_\ell|,
+ \qquad k\geq-3.
+ \label{eq:honest-relative}
+\end{equation}
+Por ejemplo, $\bar M=1$ permite que la peor desviación posterior sea tan grande
+como la peor variación observada antes de la referencia; $\bar M=2$ permite el
+doble. La restricción de suavidad acota cambios en la pendiente:
+\begin{equation}
+ |(\Delta_{k+1}-\Delta_k)-(\Delta_k-\Delta_{k-1})|\leq M.
+ \label{eq:honest-smoothness}
+\end{equation}
+Con $M=0$ la diferencia contrafactual de tendencias es lineal; valores mayores
+permiten más curvatura.
+
+Para el outcome priorizado, crecimiento real anual del ingreso operacional por
+estudiante, se reportan dos funcionales:
+\begin{align}
+ \theta_{2016}&=\tau_0, \\
+ \theta_{2016:2021}&=\frac{1}{6}\sum_{k=0}^{5}\tau_k.
+ \label{eq:honest-estimands}
+\end{align}
+Si $\boldsymbol\ell$ selecciona uno de estos funcionales y
+$\mathcal D(c)$ representa el conjunto de desviaciones admisibles bajo
+\eqref{eq:honest-relative} o \eqref{eq:honest-smoothness}, HonestDiD construye
+un conjunto de confianza uniforme sobre esas desviaciones:
+\begin{equation}
+ \mathrm{CS}_{1-\alpha}(c)
+ =\bigcup_{\boldsymbol\Delta\in\mathcal D(c)}
+ \mathrm{CI}_{1-\alpha}
+ \left[\boldsymbol\ell'
+ (\widehat{\boldsymbol\beta}-\boldsymbol\Delta);
+ \widehat{\boldsymbol\Sigma}\right].
+ \label{eq:honest-cs}
+\end{equation}
+El código usa intervalos condicionales de longitud fija para magnitud relativa y
+FLCI para suavidad, siguiendo
+\href{https://github.com/asheshrambachan/HonestDiD}{Rambachan y Roth (2023),
+\file{HonestDiD}}. Un punto sin solución numérica se reporta como ``--'' y no se
+interpreta como evidencia a favor o en contra del efecto.
+
+\section{Synthetic Difference-in-Differences}
+
+\subsection*{Archivos asociados}
+\begin{itemize}
+ \item \file{Table\_SDID\_Main\_Levels.xlsx}
+ \item \file{Table\_SDID\_Main\_Transformed.xlsx}
+ \item \file{results/SDID/SDID\_Diagnostics.xlsx}
+\end{itemize}
+
+Para cada outcome se construye una matriz balanceada $Y\in\mathbb R^{N\times T}$.
+Las primeras $N_0$ filas son controles y las últimas $N_1$ filas son tratadas;
+las primeras $T_0$ columnas son pretratamiento y las últimas $T_1$ son
+postratamiento.
+
+\subsection{Pesos de universidades y de períodos}
+
+Los pesos donor $\boldsymbol\omega=(\omega_1,\ldots,\omega_{N_0})'$ satisfacen
+\begin{equation}
+ \omega_i\geq 0,\qquad \sum_{i=1}^{N_0}\omega_i=1,
+\end{equation}
+y son elegidos para aproximar la trayectoria pretratamiento promedio de las
+tratadas mediante una combinación ponderada de controles, con regularización.
+En notación compacta,
+\begin{equation}
+ (\widehat\omega_0,\widehat{\boldsymbol\omega})
+ =\arg\min_{\omega_0,\boldsymbol\omega\in\Omega}
+ \left\|
+ \overline{\mathbf Y}_{1,\mathrm{pre}}
+ -\omega_0\mathbf 1
+ -\mathbf Y_{0,\mathrm{pre}}'\boldsymbol\omega
+ \right\|_2^2
+ +\zeta_\omega^2\|\boldsymbol\omega\|_2^2.
+ \label{eq:omega}
+\end{equation}
+
+Los pesos temporales $\boldsymbol\lambda=(\lambda_1,\ldots,\lambda_{T_0})'$,
+con $\lambda_t\geq0$ y $\sum_{t<T_0}\lambda_t=1$, se eligen para balancear
+las diferencias entre controles en el pretratamiento y el postratamiento:
+\begin{equation}
+ (\widehat\lambda_0,\widehat{\boldsymbol\lambda})
+ =\arg\min_{\lambda_0,\boldsymbol\lambda\in\Lambda}
+ \left\|
+ \overline{\mathbf Y}_{0,\mathrm{post}}
+ -\lambda_0\mathbf 1
+ -\mathbf Y_{0,\mathrm{pre}}\boldsymbol\lambda
+ \right\|_2^2
+ +\zeta_\lambda^2\|\boldsymbol\lambda\|_2^2.
+ \label{eq:lambda}
+\end{equation}
+
+\subsection{Estimador y curva de efectos}
+
+Definimos la diferencia tratada--sintética no ajustada en cada año:
+\begin{equation}
+ \delta_t=
+ \frac{1}{N_1}\sum_{i=N_0+1}^{N}Y_{it}
+ -\sum_{i=1}^{N_0}\widehat\omega_iY_{it}.
+\end{equation}
+El offset pretratamiento es
+\begin{equation}
+ \widehat b_{\mathrm{pre}}
+ =\sum_{t=1}^{T_0}\widehat\lambda_t\delta_t.
+\end{equation}
+Por tanto, la curva postratamiento es
+\begin{equation}
+ \widehat\tau_t^{\SDID}=\delta_t-\widehat b_{\mathrm{pre}},
+ \qquad t>T_0,
+ \label{eq:sdid-curve}
+\end{equation}
+y el ATT principal reportado en la tabla es
+\begin{equation}
+ \widehat\tau^{\SDID}
+ =\frac{1}{T_1}\sum_{t=T_0+1}^{T}
+   \widehat\tau_t^{\SDID}.
+ \label{eq:sdid-att}
+\end{equation}
+
+Equivalentemente, $\widehat\tau^{\SDID}$ es el coeficiente de $D_{it}$ en la
+regresión ponderada
+\begin{equation}
+ (\widehat\mu,\widehat{\boldsymbol\alpha},
+  \widehat{\boldsymbol\lambda}^{\FE},\widehat\tau)
+ =\arg\min_{\mu,\boldsymbol\alpha,\boldsymbol\lambda^{\FE},\tau}
+ \sum_{i,t}\widehat\omega_i^{*}\widehat\lambda_t^{*}
+ \left(Y_{it}-\mu-\alpha_i-\lambda_t^{\FE}-\tau D_{it}\right)^2,
+\end{equation}
+donde los pesos tratados y postratamiento son uniformes y los pesos de controles
+y del pretratamiento provienen de \eqref{eq:omega} y \eqref{eq:lambda}.
+
+En los archivos dinámicos SDID, los valores pre-2016 son brechas de ajuste
+\begin{equation}
+ \widehat g_t^{\mathrm{pre}}=\delta_t-\widehat b_{\mathrm{pre}},
+ \qquad t<2016,
+\end{equation}
+no efectos causales anticipados. Para $t\geq2016$ se usa
+\eqref{eq:sdid-curve}.
+
+La inferencia principal remuestrea universidades con reemplazo $B=500$ veces:
+\begin{align}
+ \widehat{\mathrm{se}}_{\mathrm{boot}}(\widehat\tau)
+ &=\sqrt{\frac{B-1}{B}}
+   \operatorname{sd}\!\left(
+    \widehat\tau^{*(1)},\ldots,\widehat\tau^{*(B)}
+   \right), \\
+ \mathrm{IC}_{95\%}
+ &=\widehat\tau\pm 1.96\,
+   \widehat{\mathrm{se}}_{\mathrm{boot}}(\widehat\tau).
+\end{align}
+Si el bootstrap no entrega un error válido, se usa jackknife. El $R^2$ ajustado
+no está definido para este estimador y por eso se reporta como ``--''.
+
+\section{Propensity Score Matching y entropy balancing}
+
+\subsection*{Archivos asociados}
+\begin{itemize}
+ \item \file{Propensity Score Matching/Results/Table\_PSM\_Design.csv}
+ \item \file{Propensity Score Matching/Results/PSM\_weights.csv}
+\end{itemize}
+
+Estos archivos documentan el diseño de comparabilidad pretratamiento; no
+contienen por sí solos una regresión de outcomes. El propensity score se estima
+mediante logit:
+\begin{equation}
+ e(\mathbf X_i)
+ =\Pr(\Treat_i=1\mid\mathbf X_i)
+ =\Lambda(\alpha+\mathbf X_i'\boldsymbol\beta),
+ \qquad
+ \Lambda(z)=\frac{e^z}{1+e^z}.
+\end{equation}
+
+En el diseño principal,
+\begin{equation}
+ \mathbf X_i=
+ \begin{bmatrix}
+  \log(\text{matrícula}_{i,2015}) \\
+  \log(\text{arancel}_{i,2015}) \\
+  \text{Asset Turnover}_{i,2015}
+ \end{bmatrix}.
+\end{equation}
+La distancia de Mahalanobis entre la tratada $i$ y el control $j$ es
+\begin{equation}
+ d_M(i,j)=
+ \sqrt{(\mathbf X_i-\mathbf X_j)'
+ S_X^{-1}(\mathbf X_i-\mathbf X_j)},
+\end{equation}
+sujeta al caliper de propensity score
+\begin{equation}
+ \left|\operatorname{logit}\widehat e_i-
+       \operatorname{logit}\widehat e_j\right|
+ \leq 0.20\,
+ \operatorname{sd}\!\left(\operatorname{logit}\widehat e\right).
+\end{equation}
+Se seleccionan dos controles por tratada, con reemplazo. El peso de un control
+es proporcional a su frecuencia de uso como match; las tratadas reciben peso
+uno.
+
+El balance de la covariable $X_k$ se resume mediante
+\begin{equation}
+ \mathrm{SMD}_k=
+ \frac{\bar X_{1k}-\bar X_{0k,w}}
+ {\sqrt{(s_{1k}^2+s_{0k,w}^2)/2}},
+\end{equation}
+y el tamaño muestral efectivo de los controles es
+\begin{equation}
+ \mathrm{ESS}_0=\frac{\left(\sum_{i:\Treat_i=0}w_i\right)^2}
+ {\sum_{i:\Treat_i=0}w_i^2}.
+\end{equation}
+
+En la columna de entropy balancing, los pesos resuelven
+\begin{equation}
+ \min_{w_i>0}\sum_{i:\Treat_i=0}w_i\log\left(\frac{w_i}{q_i}\right)
+\end{equation}
+sujeto a
+\begin{equation}
+ \sum_{i:\Treat_i=0}w_i=1,
+ \qquad
+ \sum_{i:\Treat_i=0}w_i\mathbf X_i
+ =\frac{1}{N_1}\sum_{i:\Treat_i=1}\mathbf X_i.
+\end{equation}
+
+Si posteriormente se estima un ATT con estos pesos, el contraste básico es
+\begin{equation}
+ \widehat\tau_{\ATT,w}
+ =\frac{1}{N_1}\sum_{i:\Treat_i=1}Y_i
+ -\sum_{i:\Treat_i=0}\widetilde w_iY_i,
+ \qquad \sum_{i:\Treat_i=0}\widetilde w_i=1.
+\end{equation}
+No obstante, ese contraste no aparece en \file{Table\_PSM\_Design.csv}: dicha
+tabla evalúa diseño, retención, soporte, balance y ESS.
+
+\section{Panel de variables instrumentales}
+
+\subsection*{Archivos asociados}
+\begin{itemize}
+ \item Código fuente: \file{Instrumental Variables Analysis/code/IV\_fixest\_FreeCollege.R}.
+ \item Resultados principales: \file{results\_ols\_iv\_fc5.csv},
+       \file{results\_baseline\_iv\_fc5.csv} y
+       \file{results\_conditional\_iv\_fc5.csv}.
+ \item Primer estadio y diagnósticos: \file{results\_first\_stage\_fc5.csv}
+       y \file{diagnostics\_iv\_fc5.csv}.
+ \item Robusteces: \file{results\_iv\_robustness\_fc5.csv},
+       \file{results\_reduced\_form\_fc5.csv},
+       \file{results\_pre2016\_placebos\_fc5.csv} y los archivos relativos
+       al instrumento de arancel de referencia.
+\end{itemize}
+
+Esta sección reproduce el código vigente y no la parametrización histórica de
+cuatro instrumentos que aparecía en una versión anterior de la tabla. El
+tratamiento endógeno es la participación observada y absorbente en Gratuidad,
+$D_{it}=\Treat_i\Post_t$, para la cohorte de adopción de 2016 frente a
+universidades nunca tratadas.
+
+Sean
+\begin{align}
+ A_{i,2015}&=\text{años de acreditación observados en 2015}, \\
+ E_{i,2015}&=\text{elegibilidad proxy de 2015, dividida por 10}, \\
+ T_{i,2006}^{z}&=\text{cobertura estandarizada del arancel de referencia de 2006}.
+\end{align}
+El instrumento principal del código es
+\begin{align}
+ Z^{A4}_{it}
+ &=\ind\{A_{i,2015}\geq4\}\Post_t.
+ \label{eq:iv-main-instrument}
+\end{align}
+Es una característica predeterminada de la institución, fijada antes de la
+reforma, e interactuada con el período post-2016.
+
+\subsection{Referencia OLS con efectos fijos}
+
+La referencia no instrumentada es
+\begin{equation}
+ Y_{it}=\alpha_i+\lambda_t+\tau_{\mathrm{OLS}}D_{it}+u_{it}.
+ \label{eq:iv-ols}
+\end{equation}
+Esta especificación no incorpora controles contemporáneos, pues matrícula,
+elegibilidad y acreditación podrían ser mediadores de la política. Por tanto,
+$\tau_{\mathrm{OLS}}$ se interpreta como el efecto total asociativo dentro de
+la comparación con efectos fijos.
+
+\subsection{IV-FE principal: primer estadio y ecuación estructural}
+
+El modelo principal es exactamente identificado. Su primer estadio es
+\begin{equation}
+ D_{it}=a_i+b_t+\pi_A Z^{A4}_{it}+v_{it},
+ \label{eq:first-stage}
+\end{equation}
+y la ecuación estructural estimada por 2SLS es
+\begin{equation}
+ Y_{it}=\alpha_i+\lambda_t+\tau_{\mathrm{LATE}}\widehat D_{it}+u_{it}.
+ \label{eq:second-stage}
+\end{equation}
+Aquí $\widehat D_{it}$ proviene de \eqref{eq:first-stage}. Bajo relevancia,
+independencia, exclusión y monotonicidad,
+$\tau_{\mathrm{LATE}}$ identifica un efecto local de la participación en
+Gratuidad para las instituciones cuyo tratamiento responde al umbral de
+acreditación. Los errores estándar se agrupan por universidad.
+
+\subsection{Especificaciones condicionales}
+
+El código estima dos variantes secundarias con controles contemporáneos. Si
+$X_{it}$ denota uno de los siguientes vectores,
+\begin{align}
+ X^{(c)}_{it}
+ &=\bigl(\log \text{matrícula}_{it},E_{it}/10,C_{it}/10,A_{it}\bigr)', \\
+ X^{(d)}_{it}
+ &=\bigl(\log \text{matrícula}_{it},E_{it}/10,C_{it}/10,
+          \ind\{A_{it}\geq4\}\bigr)',
+\end{align}
+donde $C_{it}$ es la cobertura contemporánea de la elegibilidad proxy, las
+ecuaciones son
+\begin{align}
+ D_{it}
+ &=a_i+b_t+X_{it}'\gamma+\pi_A Z^{A4}_{it}+v_{it},
+ \label{eq:first-stage-controls}\\
+ Y_{it}
+ &=\alpha_i+\lambda_t+X_{it}'\beta
+   +\tau_{\mathrm{cond}}\widehat D_{it}+u_{it}.
+ \label{eq:second-stage-controls}
+\end{align}
+Como esos controles pueden responder a Gratuidad, el código separa estas
+estimaciones condicionales del efecto total principal.
+
+\subsection{Instrumentos y especificaciones de robustez}
+
+Además de \eqref{eq:iv-main-instrument}, el código construye
+\begin{align}
+ Z^{E15}_{it}&=E_{i,2015}\Post_t, \\
+ Z^{A\mathrm{yrs}}_{it}&=A_{i,2015}\Post_t, \\
+ Z^{T06}_{it}&=T_{i,2006}^{z}\Post_t, \\
+ Z^{\bar E}_{it}&=\bar E_{i,2014:2015}\Post_t, \\
+ Z^{\bar A}_{it}&=\bar A_{i,t<2016}\Post_t, \\
+ Z^{E\mathrm{cur}}_{it}&=(E_{it}/10)\Post_t, \\
+ Z^{A4\mathrm{cur}}_{it}&=\ind\{A_{it}\geq4\}\Post_t.
+\end{align}
+La cobertura de arancel se define en los datos como
+\begin{equation}
+ \mathrm{Coverage}_{i,2006}
+ =\frac{\text{arancel de referencia}_{i,2006}}
+        {\text{arancel efectivo}_{i,2006}}
+ =1+\frac{\text{referencia}-\text{efectivo}}
+          {\text{efectivo}},
+\end{equation}
+y $T_{i,2006}^{z}$ es su versión estandarizada.
+
+Cada robustez sustituye $Z^{A4}_{it}$ en
+\eqref{eq:first-stage} por el conjunto $\mathcal Z_{it}^{(r)}$:
+\begin{align}
+ \mathcal Z^{(1)}&=\{Z^{E15}\}, &
+ \mathcal Z^{(2)}&=\{Z^{A4}\}, &
+ \mathcal Z^{(3)}&=\{Z^{T06}\}, \\
+ \mathcal Z^{(4)}&=\{Z^{A4},Z^{T06}\}, &
+ \mathcal Z^{(5)}&=\{Z^{E15},Z^{A\mathrm{yrs}}\}, \\
+ \mathcal Z^{(6)}&=\{Z^{\bar E},Z^{\bar A}\}, &
+ \mathcal Z^{(7)}&=\{Z^{E\mathrm{cur}},Z^{A4\mathrm{cur}}\}.
+\end{align}
+El último conjunto es una robustez potencialmente endógena y no un diseño IV
+principal. El código también repite el IV base en una muestra común de outcomes.
+
+Para los dos instrumentos predeterminados destacados, las formas reducidas son
+\begin{align}
+ Y_{it}&=\alpha_i+\lambda_t+\rho_A Z^{A4}_{it}+e_{it}, \\
+ Y_{it}&=\alpha_i+\lambda_t+\rho_T Z^{T06}_{it}+e_{it}.
+\end{align}
+
+\subsection{Placebos y diagnósticos}
+
+Para cada falso inicio $f\in\{2013,2014,2015\}$ y usando solamente años
+anteriores a 2016, el código estima
+\begin{equation}
+ Y_{it}=\alpha_i+\lambda_t
+ +\rho_{E,f}\bigl(E_{i,2015}\ind\{t\geq f\}\bigr)
+ +\rho_{A,f}\bigl(\ind\{A_{i,2015}\geq4\}\ind\{t\geq f\}\bigr)
+ +\eta\log(\text{matrícula}_{it})+e_{it}.
+\end{equation}
+
+La fortaleza del primer estadio se evalúa prioritariamente con el estadístico
+Wald IV robusto a la agrupación. El código también registra el estadístico $F$
+del primer estadio, Wu--Hausman y, cuando existe sobreidentificación, Sargan.
+Los outcomes en variaciones reales logarítmicas anuales se estiman directamente;
+el código no aplica una transformación \emph{signed log1p} a niveles o razones.
+
+\section{Correspondencia resumida entre tablas y estimandos}
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.37\textwidth}
+                  >{\raggedright\arraybackslash}p{0.25\textwidth}
+                  >{\raggedright\arraybackslash}p{0.27\textwidth}}
+\toprule
+Archivo & Estimando o contenido & Ecuación principal \\
+\midrule
+\endfirsthead
+\toprule
+Archivo & Estimando o contenido & Ecuación principal \\
+\midrule
+\endhead
+\file{Table\_Descriptive\_Statistics.xlsx}
+& Momentos muestrales pre/post y CRUCH/privada
+& Media, mediana, desviación estándar y $N$ \\
+\addlinespace
+\file{Table\_Excluded\_Universities\_Descriptive.xlsx}
+& Momentos de las cinco universidades excluidas
+& Media, mediana, desviación estándar, extremos y cobertura temporal \\
+\addlinespace
+\file{Table\_DiD\_Main\_Levels.xlsx}
+& Efecto promedio DiD en niveles
+& Ecuaciones \eqref{eq:basic-did}--\eqref{eq:twfe-controls} \\
+\addlinespace
+\file{Table\_DiD\_Main\_Transformed.xlsx}
+& Efecto DiD sobre $g_j(Y)$
+& Ecuaciones \eqref{eq:basic-did}--\eqref{eq:twfe-controls} con outcome transformado \\
+\addlinespace
+\file{Table\_PreTrends\_Main\_Levels.xlsx}
+& Pre-tendencia 2012 y anticipación 2014--2015 en niveles
+& Ecuación \eqref{eq:pretrends-change-regression} \\
+\addlinespace
+\file{Table\_PreTrends\_Main\_Transformed.xlsx}
+& Pre-tendencia 2012 y anticipación 2014--2015 sobre $g_j(Y)$
+& Ecuación \eqref{eq:pretrends-change-regression} con outcome transformado \\
+\addlinespace
+\file{Table\_HonestDiD\_Relative\_Magnitude.csv} y
+\file{Table\_HonestDiD\_Smoothness.csv}
+& IC robustos para impacto 2016 y promedio 2016--2021
+& Ecuaciones \eqref{eq:event-bias-decomposition}--\eqref{eq:honest-cs} \\
+\addlinespace
+\file{Table\_SDID\_Main\_Levels.xlsx}
+& ATT SDID ponderado en niveles
+& Ecuaciones \eqref{eq:omega}--\eqref{eq:sdid-att} \\
+\addlinespace
+\file{Table\_SDID\_Main\_Transformed.xlsx}
+& ATT SDID ponderado sobre $g_j(Y)$
+& Ecuaciones \eqref{eq:omega}--\eqref{eq:sdid-att} con outcome transformado \\
+\addlinespace
+\file{Table\_PSM\_Design.csv}
+& Calidad del diseño de matching/ponderación
+& Propensity score, Mahalanobis, SMD y ESS \\
+\addlinespace
+\file{PSM\_weights.csv}
+& Pesos ATT de universidades
+& Frecuencia de matching y entropy balancing \\
+\addlinespace
+\file{Table\_IV\_Main.xlsx}
+& OLS-FE e IV-FE, con y sin controles de riesgo
+& Ecuaciones \eqref{eq:iv-ols}--\eqref{eq:second-stage} \\
+\addlinespace
+\file{results\_conditional\_iv\_fc5.csv}
+& IV-FE con controles contemporáneos
+& Ecuaciones \eqref{eq:first-stage-controls} y \eqref{eq:second-stage-controls} \\
+\addlinespace
+\file{results\_iv\_robustness\_fc5.csv}
+& Instrumentos alternativos y combinados
+& Primera y segunda etapas con $\mathcal Z^{(r)}$ \\
+\bottomrule
+\end{longtable}
+
+\section{Supuestos que deben acompañar la interpretación}
+
+\begin{enumerate}
+ \item \textbf{DiD/TWFE:} tendencias paralelas condicionales, ausencia de
+ anticipación y composición comparable de la muestra.
+ \item \textbf{Pretrends/HonestDiD:} el análisis de potencia no prueba
+ tendencias paralelas. Los intervalos robustos son válidos condicionalmente al
+ conjunto de desviaciones elegido (magnitud relativa o suavidad) y a la
+ aproximación normal conjunta de los coeficientes event-study.
+ \item \textbf{SDID:} la combinación ponderada de controles reproduce de forma
+ suficiente la trayectoria contrafactual pretratamiento; los gaps pre son
+ diagnósticos de ajuste, no ATT anticipados.
+ \item \textbf{PSM:} independencia condicional dada la información
+ pretratamiento y soporte común. El balance observado no prueba ausencia de
+ confusión no observada.
+ \item \textbf{IV:} relevancia, exclusión, independencia y monotonicidad de los
+ instrumentos. Un primer estadio fuerte no valida por sí solo la restricción de
+ exclusión.
+\end{enumerate}
+
+\end{document}
